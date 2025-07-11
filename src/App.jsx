@@ -1,8 +1,26 @@
 import React, { useState, useEffect } from "react";
+
+// Dark mode hook
+const useDarkMode = () => {
+  const [dark, setDark] = useState(() => {
+    const saved = localStorage.getItem("darkMode");
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(dark));
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [dark]);
+
+  return [dark, setDark];
+};
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import MoodFilter from "./components/MoodFilter";
-import './App.css';
 
 const App = () => {
   const [tasks, setTasks] = useState(() => {
@@ -31,7 +49,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold text-center mb-4">🧠 FocusFlow</h1>
+      <h1 className="text-3xl font-bold text-center mb-4">🧠 FocusFlow and ToDo List App</h1>
       <TaskForm addTask={addTask} />
       <MoodFilter filterMood={filterMood} setFilterMood={setFilterMood} />
       <TaskList tasks={filteredTasks} updateTask={updateTask} deleteTask={deleteTask} />
@@ -39,4 +57,4 @@ const App = () => {
   );
 };
 
-export default App
+export default App;
